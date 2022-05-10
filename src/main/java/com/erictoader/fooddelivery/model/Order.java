@@ -1,19 +1,28 @@
 package com.erictoader.fooddelivery.model;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
-public class Order {
+public class Order implements Serializable {
     private Integer orderID;
-    private Integer clientID;
+    private String clientName;
     private Date orderDate;
+    private String status;
+    private String assignedEmployee;
+
+    public static final String FINALIZED = "FINALIZED";
+    public static final String IN_PROGRESS = "IN PROGRESS";
+    public static final String NOT_ASSIGNED = "NOT ASSIGNED";
 
     public Order() {
     }
 
-    public Order(Integer orderID, Integer clientID, Date orderDate) {
+    public Order(Integer orderID, String clientName, Date orderDate, String status) {
         this.orderID = orderID;
-        this.clientID = clientID;
+        this.clientName = clientName;
         this.orderDate = orderDate;
+        this.status = status;
     }
 
     public Integer getOrderID() {
@@ -24,12 +33,12 @@ public class Order {
         this.orderID = orderID;
     }
 
-    public Integer getClientID() {
-        return clientID;
+    public String getClientName() {
+        return clientName;
     }
 
-    public void setClientID(Integer clientID) {
-        this.clientID = clientID;
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
     }
 
     public Date getOrderDate() {
@@ -40,7 +49,42 @@ public class Order {
         this.orderDate = orderDate;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getAssignedEmployee() {
+        return assignedEmployee;
+    }
+
+    public void setAssignedEmployee(String assignedEmployee) {
+        this.assignedEmployee = assignedEmployee;
+    }
+
     public int hashCode() {
-        return (orderID + 1) * (clientID + 1) * orderDate.getMonth();
+        return orderID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return Objects.equals(orderID, order.orderID);
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderID=" + orderID +
+                ", clientName='" + clientName + '\'' +
+                ", orderDate=" + orderDate +
+                ", status='" + status + '\'' +
+                ", assignedEmployee='" + assignedEmployee + '\'' +
+                '}';
     }
 }

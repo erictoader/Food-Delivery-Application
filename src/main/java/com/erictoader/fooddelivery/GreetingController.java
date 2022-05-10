@@ -75,10 +75,10 @@ public class GreetingController extends ControllerClass implements Initializable
     }
 
     private void showPanel() throws IOException {
-        if(Constants.USER_CURRENTTYPE.equals("admin")) {
+        if(Constants.USER_CURRENTTYPE.equals(Constants.USER_ADMIN)) {
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("admin-control-panel.fxml")));
-        } else if(Constants.USER_CURRENTTYPE.equals("employee")) {
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("welcome-view.fxml")));
+        } else if(Constants.USER_CURRENTTYPE.equals(Constants.USER_EMPLOYEE)) {
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("employee-panel.fxml")));
         } else {
             root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("customer-panel.fxml")));
         }

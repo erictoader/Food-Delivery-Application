@@ -9,10 +9,8 @@ import com.erictoader.fooddelivery.model.Users;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -49,14 +47,14 @@ public class RegisterNewUserController extends ControllerClass {
         if(validateUsername(event, newUser) && validatePassword(event, newUser)) {
             DbUsersBLL dbUsersBLL = new DbUsersBLL();
             dbUsersBLL.insert(newUser);
-            showDialog(event, REG_SUCCESS, "Your account has been registered. You can now use its credentials to log in.");
+            super.showDialog(event, REG_SUCCESS, "Your account has been registered. You can now use its credentials to log in.");
             closeView(event);
         }
     }
 
     private boolean validateUsername(ActionEvent event, Users u) {
         if(u.getUsername().equals("")) {
-            showDialog(event, REG_FAILED, "Username field must not be empty.");
+            super.showDialog(event, REG_FAILED, "Username field must not be empty.");
             return false;
         }
         DbUsersBLL dbUsersBLL = new DbUsersBLL();
@@ -65,7 +63,7 @@ public class RegisterNewUserController extends ControllerClass {
         if(uList.isEmpty()) {
             return true;
         } else {
-            showDialog(event, REG_FAILED, "The given username is already in use.");
+            super.showDialog(event, REG_FAILED, "The given username is already in use.");
             return false;
         }
     }
@@ -77,22 +75,12 @@ public class RegisterNewUserController extends ControllerClass {
             passwordValidator.validate(u);
             return true;
         } catch (PasswordTooShortException | PasswordTooSimpleException ptsEx) {
-            showDialog(event, REG_FAILED, ptsEx.getMessage());
+            super.showDialog(event, REG_FAILED, ptsEx.getMessage());
             return false;
         } catch (Exception e) {
-            showDialog(event, REG_FAILED, "Unexpected error occurred. Try again.");
+            super.showDialog(event, REG_FAILED, "Unexpected error occurred. Try again.");
             return false;
         }
-    }
-
-    private void showDialog(ActionEvent event, String title, String content) {
-        Alert.AlertType type = Alert.AlertType.INFORMATION;
-        Alert alert = new Alert(type, "");
-        alert.initModality(Modality.APPLICATION_MODAL);
-        alert.initOwner(((Node) event.getSource()).getScene().getWindow());
-        alert.setTitle(title);
-        alert.getDialogPane().setHeaderText(content);
-        alert.showAndWait();
     }
 
     private void closeView(ActionEvent event) {

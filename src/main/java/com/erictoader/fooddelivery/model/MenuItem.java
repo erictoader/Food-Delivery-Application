@@ -29,4 +29,5 @@ public abstract class MenuItem implements Comparable<MenuItem>, Serializable {
     public abstract void setSodium(Integer sodium);
     public abstract Integer getPrice();
     public abstract void setPrice(Integer price);
+    public abstract String getContains();
 }

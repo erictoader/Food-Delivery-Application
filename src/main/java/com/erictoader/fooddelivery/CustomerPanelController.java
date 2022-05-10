@@ -1,7 +1,9 @@
 package com.erictoader.fooddelivery;
 
 import com.erictoader.fooddelivery.bll.Constants;
+import com.erictoader.fooddelivery.dao.Serializator;
 import com.erictoader.fooddelivery.model.MenuItem;
+import com.erictoader.fooddelivery.model.Order;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
@@ -155,7 +157,7 @@ public class CustomerPanelController extends ControllerClass implements Initiali
     @FXML
     private TableView<MenuItem> tv_shoppingcart;
 
-    private List<MenuItem> shoppingCart;
+    private ArrayList<MenuItem> shoppingCart;
     private boolean isFilterShown = false;
     private boolean searchApplied = false;
     private boolean filtersApplied = false;
@@ -163,13 +165,25 @@ public class CustomerPanelController extends ControllerClass implements Initiali
     @FXML
     void addToCart(ActionEvent event) {
         MenuItem toAdd = tv_menutable.getSelectionModel().getSelectedItem();
-        shoppingCart.add(toAdd);
-        refreshShoppingCart();
+        if(toAdd != null) {
+            shoppingCart.add(toAdd);
+            refreshShoppingCart();
+        } else super.showDialog(event, "Operation denied", "Select an item before attempting to add to cart");
     }
 
     @FXML
     void attemptCheckout(ActionEvent event) {
+        if(!shoppingCart.isEmpty()) {
+            Integer orderID = Constants.ds.getOrders().size();
+            Order order = new Order(orderID, Constants.USER_FULLNAME, new Date(), Order.NOT_ASSIGNED);
 
+            Constants.ds.addNewOrder(order, shoppingCart);
+            Serializator.serializeData(Constants.ds);
+
+            shoppingCart = new ArrayList<>();
+            refreshShoppingCart();
+            super.showDialog(event, "Order placed", "Your order has been successfully placed!");
+        } else super.showDialog(event, "Checkout unavailable", "Shopping cart is empty!");
     }
 
     @FXML
@@ -191,6 +205,7 @@ public class CustomerPanelController extends ControllerClass implements Initiali
             }
             label_shoppingcart_total.setText("Total: " + total);
             label_shoppingcart_total.setVisible(true);
+            btn_client_gocheckout.setVisible(true);
         } else {
             tv_shoppingcart.setVisible(false);
             label_shoppingcart_status.setText(CART_EMPTY);
@@ -198,13 +213,15 @@ public class CustomerPanelController extends ControllerClass implements Initiali
             label_shoppingcart_tooltip.setVisible(false);
             label_shoppingcart_total.setText("Total: 0");
             label_shoppingcart_total.setVisible(false);
+            btn_client_gocheckout.setVisible(false);
         }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        shoppingCart = new LinkedList<>();
+        shoppingCart = new ArrayList<>();
 
+        btn_client_gocheckout.setVisible(false);
         tv_shoppingcart.setVisible(false);
         label_shoppingcart_status.setText(CART_EMPTY);
         label_shoppingcart_tooltip.setVisible(false);

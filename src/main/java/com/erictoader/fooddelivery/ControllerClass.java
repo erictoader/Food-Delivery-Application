@@ -13,13 +13,13 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableView;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -51,6 +51,13 @@ public class ControllerClass {
             Deserializator.deserializeData();
         }
 
+        Constants.dailyMenuIndex = 1;
+        for(MenuItem mi : Constants.ds.getMenu()) {
+            if(mi.getTitle().contains(Constants.DAILY_MENU)) {
+                Constants.dailyMenuIndex++;
+            }
+        }
+
         Set<MenuItem> itemList = Constants.ds.getMenu();
 
         ObservableList<MenuItem> list = FXCollections.observableArrayList(itemList);
@@ -62,5 +69,15 @@ public class ControllerClass {
     void cancel(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.close();
+    }
+
+    void showDialog(ActionEvent event, String title, String content) {
+        Alert.AlertType type = Alert.AlertType.INFORMATION;
+        Alert alert = new Alert(type, "");
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.initOwner(((Node) event.getSource()).getScene().getWindow());
+        alert.setTitle(title);
+        alert.getDialogPane().setHeaderText(content);
+        alert.showAndWait();
     }
 }

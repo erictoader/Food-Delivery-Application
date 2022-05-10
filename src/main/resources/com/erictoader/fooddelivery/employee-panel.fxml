@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="810.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.erictoader.fooddelivery.EmployeeController">
+    <children>
+        <Pane layoutY="50.0" prefHeight="760.0" prefWidth="440.0" style="-fx-border-color: #000000;">
+            <children>
+                <Label layoutX="10.0" layoutY="740.0" text="Food Delivery Management System v0 by Eric Toader" />
+                <Label layoutX="108.0" layoutY="236.0" text="Employee Control Panel">
+                    <font>
+                        <Font size="22.0" />
+                    </font>
+                </Label>
+                <Button fx:id="btn_start_processing" layoutX="135.0" layoutY="411.0" mnemonicParsing="false" onAction="#startProcessingOrder" prefHeight="52.0" prefWidth="179.0" text="Start processing" />
+                <Button fx:id="btn_finalize_order" layoutX="135.0" layoutY="541.0" mnemonicParsing="false" onAction="#finalizeOrder" prefHeight="52.0" prefWidth="179.0" text="Finalize order" />
+            </children>
+        </Pane>
+        <Pane layoutX="440.0" prefHeight="810.0" prefWidth="1000.0" style="-fx-border-color: #000000;">
+            <children>
+                <TableView fx:id="tv_ordertable" layoutX="1.0" layoutY="1.0" prefHeight="808.0" prefWidth="998.0">
+                    <columns>
+                        <TableColumn fx:id="tc_orderid" prefWidth="79.7509765625" text="Order ID" />
+                  <TableColumn fx:id="tc_contents" prefWidth="488.04730224609375" text="Order contents" />
+                        <TableColumn fx:id="tc_date" minWidth="0.0" prefWidth="146.95269775390625" text="Date" />
+                        <TableColumn fx:id="tc_status" prefWidth="138.08758544921875" text="Status" />
+                        <TableColumn fx:id="tc_emp" prefWidth="144.82122802734375" text="Assigned employee" />
+                    </columns>
+                </TableView>
+            </children>
+        </Pane>
+        <Pane prefHeight="50.0" prefWidth="440.0" style="-fx-border-color: #000000;">
+            <children>
+                <Label fx:id="label_currentsession" layoutX="120.0" layoutY="25.0" text="Current session: johndoe">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+                <Button fx:id="btn_admin_logout" layoutX="7.0" layoutY="7.0" mnemonicParsing="false" onAction="#logout" prefHeight="36.0" prefWidth="87.0" text="Logout" />
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>

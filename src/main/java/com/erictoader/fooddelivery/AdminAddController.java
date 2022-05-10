@@ -8,10 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -60,13 +58,14 @@ public class AdminAddController extends ControllerClass {
         int currentSize = Constants.ds.getMenu().size();
         Constants.ds.addNewMenuItem(item);
         if(currentSize == Constants.ds.getMenu().size()) {
-            showDialog(event, "Operation unsuccessful", "An item with the same name already exists.");
+            super.showDialog(event, "Operation unsuccessful", "An item with the same name already exists.");
         } else {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.close();
 
             Constants.controller.populateTable(Constants.tv);
             ((AdminPanelController)Constants.controller).showConfirmation("Item added successfully!");
+            ((AdminPanelController)Constants.controller).searchByTitle();
         }
     }
 
@@ -75,14 +74,14 @@ public class AdminAddController extends ControllerClass {
         super.cancel(event);
     }
 
-    private void showDialog(ActionEvent event, String title, String content) {
-        Alert.AlertType type = Alert.AlertType.INFORMATION;
-        Alert alert = new Alert(type, "");
-        alert.initModality(Modality.APPLICATION_MODAL);
-        alert.initOwner(((Node) event.getSource()).getScene().getWindow());
-        alert.setTitle(title);
-        alert.getDialogPane().setHeaderText(content);
-        alert.showAndWait();
-    }
+//    private void showDialog(ActionEvent event, String title, String content) {
+//        Alert.AlertType type = Alert.AlertType.INFORMATION;
+//        Alert alert = new Alert(type, "");
+//        alert.initModality(Modality.APPLICATION_MODAL);
+//        alert.initOwner(((Node) event.getSource()).getScene().getWindow());
+//        alert.setTitle(title);
+//        alert.getDialogPane().setHeaderText(content);
+//        alert.showAndWait();
+//    }
 }
 

@@ -2,6 +2,7 @@ package com.erictoader.fooddelivery;
 
 import com.erictoader.fooddelivery.bll.Constants;
 import com.erictoader.fooddelivery.model.BaseProduct;
+import com.erictoader.fooddelivery.model.CompositeProduct;
 import com.erictoader.fooddelivery.model.MenuItem;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -45,13 +46,21 @@ public class AdminUpdateController extends ControllerClass implements Initializa
 
     @FXML
     void updateItem(ActionEvent event) {
-        MenuItem item = new BaseProduct();
+
+        MenuItem item;
+
+        if(old.getClass() == BaseProduct.class) {
+            item = new BaseProduct();
+            item.setCalories(Integer.parseInt(tf_update_calories.getText()));
+            item.setProtein(Integer.parseInt(tf_update_protein.getText()));
+            item.setFat(Integer.parseInt(tf_update_fat.getText()));
+            item.setSodium(Integer.parseInt(tf_update_sodium.getText()));
+        } else {
+            item = new CompositeProduct();
+            ((CompositeProduct)item).setProducts(((CompositeProduct)old).getProducts());
+        }
         item.setTitle(tf_update_title.getText());
         item.setRating(itemRating);
-        item.setCalories(Integer.parseInt(tf_update_calories.getText()));
-        item.setProtein(Integer.parseInt(tf_update_protein.getText()));
-        item.setFat(Integer.parseInt(tf_update_fat.getText()));
-        item.setSodium(Integer.parseInt(tf_update_sodium.getText()));
         item.setPrice(Integer.parseInt(tf_update_price.getText()));
 
         Constants.ds.updateItemData(old, item);
@@ -60,6 +69,7 @@ public class AdminUpdateController extends ControllerClass implements Initializa
 
         Constants.controller.populateTable(Constants.tv);
         ((AdminPanelController)Constants.controller).showConfirmation("Item updated successfully!");
+        ((AdminPanelController)Constants.controller).searchByTitle();
     }
 
     @FXML

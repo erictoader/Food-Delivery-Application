@@ -12,6 +12,7 @@ module com.erictoader.fooddelivery {
     requires java.sql;
     requires mysql.connector.java;
     requires java.desktop;
+    requires itextpdf;
 
     opens com.erictoader.fooddelivery to javafx.fxml;
     exports com.erictoader.fooddelivery;

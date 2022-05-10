@@ -90,16 +90,12 @@ public class BaseProduct extends MenuItem{
         return thisFormatted.toLowerCase().compareTo(miFormatted.toLowerCase());
     }
 
+    public String getContains() {
+        return "N/A";
+    }
+
     @Override
     public String toString() {
-        return "BaseProduct{" +
-                "title='" + title + '\'' +
-                ", rating=" + rating +
-                ", calories=" + calories +
-                ", protein=" + protein +
-                ", fat=" + fat +
-                ", sodium=" + sodium +
-                ", price=" + price +
-                '}';
+        return title;
     }
 }

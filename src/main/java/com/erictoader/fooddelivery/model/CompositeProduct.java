@@ -89,6 +89,21 @@ public class CompositeProduct extends MenuItem{
 
     public void setProducts(List<MenuItem> products) {
         this.products = products;
+        calculateMacronutrients(products);
+    }
+
+    private void calculateMacronutrients(List<MenuItem> products) {
+        int cal = 0, pro = 0, fa = 0, sod = 0;
+        for(MenuItem mi : products) {
+            cal += mi.getCalories();
+            pro += mi.getProtein();
+            fa += mi.getFat();
+            sod += mi.getSodium();
+        }
+        setCalories(cal);
+        setProtein(pro);
+        setFat(fa);
+        setSodium(sod);
     }
 
     @Override
@@ -107,17 +122,18 @@ public class CompositeProduct extends MenuItem{
         return thisFormatted.toLowerCase().compareTo(miFormatted.toLowerCase());
     }
 
+    public String getContains() {
+        StringBuilder sb = new StringBuilder();
+        for(MenuItem mi : products) {
+            sb.append(mi.getTitle()).append(", ");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.deleteCharAt(sb.length() - 1);
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
-        return "CompositeProduct{" +
-                "title='" + title + '\'' +
-                ", rating=" + rating +
-                ", calories=" + calories +
-                ", protein=" + protein +
-                ", fat=" + fat +
-                ", sodium=" + sodium +
-                ", price=" + price +
-                ", products=" + products +
-                '}';
+        return title;
     }
 }

@@ -11,15 +11,11 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -52,7 +48,7 @@ public class HelloController extends ControllerClass {
             ArrayList<Users> uList = (ArrayList<Users>) dbUsersBLL.findUser(u);
 
             if(uList.isEmpty()) {
-                showDialog(event, "Incorrect login information", "There is no account that matches the provided login information.");
+                super.showDialog(event, "Incorrect login information", "There is no account that matches the provided login information.");
             } else {
                 u.setUsertype(uList.get(0).getUsertype());
                 Constants.USER_CURRENTTYPE = u.getUsertype();
@@ -95,7 +91,7 @@ public class HelloController extends ControllerClass {
             stage1.setResizable(false);
             stage1.show();
         } else {
-            showDialog(event, "Connection unavailable", "Server is down. Please try again later.");
+            super.showDialog(event, "Connection unavailable", "Server is down. Please try again later.");
         }
     }
 
@@ -104,13 +100,13 @@ public class HelloController extends ControllerClass {
         return (server != null);
     }
 
-    private void showDialog(ActionEvent event, String title, String content) {
-        Alert.AlertType type = Alert.AlertType.INFORMATION;
-        Alert alert = new Alert(type, "");
-        alert.initModality(Modality.APPLICATION_MODAL);
-        alert.initOwner(((Node) event.getSource()).getScene().getWindow());
-        alert.setTitle(title);
-        alert.getDialogPane().setHeaderText(content);
-        alert.showAndWait();
-    }
+//    private void showDialog(ActionEvent event, String title, String content) {
+//        Alert.AlertType type = Alert.AlertType.INFORMATION;
+//        Alert alert = new Alert(type, "");
+//        alert.initModality(Modality.APPLICATION_MODAL);
+//        alert.initOwner(((Node) event.getSource()).getScene().getWindow());
+//        alert.setTitle(title);
+//        alert.getDialogPane().setHeaderText(content);
+//        alert.showAndWait();
+//    }
 }

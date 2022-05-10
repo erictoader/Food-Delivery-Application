@@ -11,8 +11,12 @@ public final class Constants {
 
     public static String USER_FULLNAME = "";
     public static String USER_CURRENTTYPE = "";
+    public static Integer USER_ID = -1;
 
     public static DeliveryService ds = null;
     public static ControllerClass controller = null;
     public static TableView<MenuItem> tv;
+
+    public static Integer dailyMenuIndex = 1;
+    public static final String DAILY_MENU = "Daily Menu";
 }
