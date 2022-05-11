@@ -18,7 +18,7 @@ import java.util.ArrayList;
  *   This class is for generating and storing a bill containing an order's information in a PDF format
  *   @author Toader Eric-Stefan
  */
-public class BillGenerator {
+public final class BillGenerator {
     /*
      *   Constructor for creating a bill object and storing a file locally
      *   @param c The client that made the order
@@ -37,7 +37,6 @@ public class BillGenerator {
             doc.add(new Paragraph("Order ID: " + o.getOrderID()));
             doc.add(new Paragraph(" "));
 
-            doc.add(new Paragraph("Client ID: " + Constants.USER_ID));
             doc.add(new Paragraph("Name: " + Constants.USER_FULLNAME));
             doc.add(new Paragraph(" "));
 

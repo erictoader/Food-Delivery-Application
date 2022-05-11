@@ -15,7 +15,7 @@
     <children>
         <Pane layoutY="50.0" prefHeight="760.0" prefWidth="340.0" style="-fx-border-color: #000000;">
             <children>
-                <Label layoutX="10.0" layoutY="740.0" text="Food Delivery Management System v0 by Eric Toader" />
+                <Label layoutX="10.0" layoutY="740.0" text="Food Delivery Management System v1.0 by Eric Toader" />
                 <Button fx:id="btn_client_addcart" layoutX="75.0" layoutY="527.0" mnemonicParsing="false" onAction="#addToCart" prefHeight="52.0" prefWidth="179.0" text="Add to cart" />
                 <Button fx:id="btn_client_gocheckout" layoutX="75.0" layoutY="609.0" mnemonicParsing="false" onAction="#attemptCheckout" prefHeight="52.0" prefWidth="179.0" text="Proceed to checkout" />
             <TableView fx:id="tv_shoppingcart" layoutX="39.0" layoutY="78.0" prefHeight="359.0" prefWidth="260.0">

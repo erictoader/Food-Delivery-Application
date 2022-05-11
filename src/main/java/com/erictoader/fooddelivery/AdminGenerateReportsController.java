@@ -2,6 +2,7 @@ package com.erictoader.fooddelivery;
 
 import com.erictoader.fooddelivery.bll.Constants;
 import com.erictoader.fooddelivery.bll.ReportGenerator;
+import com.erictoader.fooddelivery.model.MenuItem;
 import com.erictoader.fooddelivery.model.Order;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,10 +12,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.*;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 public class AdminGenerateReportsController extends ControllerClass implements Initializable {
 
@@ -47,7 +50,7 @@ public class AdminGenerateReportsController extends ControllerClass implements I
 
     private static final Integer UNSELECTED_REPORT = -1;
     private static final Integer T_INTERVAL_REPORT = 0;
-    private static final Integer M_ORDERS_REPORT = 1;
+    private static final Integer M_ORDERED_PROD_REPORT = 1;
     private static final Integer V_CLIENTS_REPORT = 2;
     private static final Integer D_ORDERS_REPORT = 3;
 
@@ -63,7 +66,7 @@ public class AdminGenerateReportsController extends ControllerClass implements I
         label_text1.setText("Ordered more times than:");
         tf_text1.setVisible(true);
         tf_text1.setText("");
-        currentSelection = M_ORDERS_REPORT;
+        currentSelection = M_ORDERED_PROD_REPORT;
     }
 
     @FXML
@@ -76,6 +79,8 @@ public class AdminGenerateReportsController extends ControllerClass implements I
         label_text1.setText("Day of interest:");
         tf_text1.setVisible(true);
         tf_text1.setText("");
+        label_text2.setVisible(true);
+        label_text2.setText("Date format: dd/mm/yyyy");
         currentSelection = D_ORDERS_REPORT;
     }
 
@@ -124,15 +129,110 @@ public class AdminGenerateReportsController extends ControllerClass implements I
                 ReportGenerator.generateTimeIntervalReport(orderList,tf_text1.getText(),tf_text2.getText(),Constants.USER_FULLNAME);
                 break;
             case 1 :
+                HashMap<MenuItem, Integer> hashMap = new HashMap<>();
+                for(Order o : Constants.ds.getOrders().keySet()) {
+                    for(MenuItem mi : Constants.ds.getOrders().get(o)) {
+                        if(hashMap.containsKey(mi)) {
+                            hashMap.put(mi, hashMap.get(mi) + 1);
+                        } else hashMap.put(mi, 1);
+                    }
+                }
+
+                try {
+                    int min = Integer.parseInt(tf_text1.getText());
+                    Map<MenuItem, Integer> mostOrdered = hashMap.entrySet().stream()
+                            .filter(p -> p.getValue() > min)
+                            .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
+                    ReportGenerator.generateMostOrdered(mostOrdered, tf_text1.getText(), Constants.USER_FULLNAME);
+                } catch (Exception e) {
+                    super.showDialog(event, "Operation failed", "Please insert a number in the text field");
+                    return;
+                }
                 break;
             case 2 :
+                HashMap<OrderByCustomer, Integer> highOrders = new HashMap<>();
+                try {
+                    for(Order o : Constants.ds.getOrders().keySet()) {
+                        int total = 0;
+                        for(MenuItem mi : Constants.ds.getOrders().get(o)) {
+                            total += mi.computePrice();
+                        }
+                        if(total > Integer.parseInt(tf_text2.getText())) {
+                            OrderByCustomer customer = new OrderByCustomer(o.getClientName());
+                            if(highOrders.containsKey(customer)) {
+                                highOrders.put(customer, highOrders.get(customer) + 1);
+                            } else highOrders.put(customer, 1);
+                        }
+                    }
+
+                    int minOrders = Integer.parseInt(tf_text1.getText());
+                    Map<OrderByCustomer, Integer> amountOrders = highOrders.entrySet().stream()
+                            .filter(p -> p.getValue() > minOrders)
+                            .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
+                    ReportGenerator.generateClientsReport(amountOrders, tf_text1.getText(),  tf_text2.getText(), Constants.USER_FULLNAME);
+                } catch (Exception e) {
+                    super.showDialog(event, "Operation failed", "Please insert numbers in the text fields");
+                    return;
+                }
                 break;
             case 3 :
+                try {
+                    String date = tf_text1.getText();
+                    String[] dates = date.split("/");
+                    int day = Integer.parseInt(dates[0]);
+                    int month = Integer.parseInt(dates[1]);
+                    int year = Integer.parseInt(dates[2]);
+
+                    Map<Order, ArrayList<MenuItem>> dayFilter = Constants.ds.getOrders().entrySet().stream()
+                            .filter(p -> Instant.ofEpochMilli(p.getKey().getOrderDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDate().getDayOfMonth()  == day &&
+                                    Instant.ofEpochMilli(p.getKey().getOrderDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDate().getMonthValue() == month &&
+                                    Instant.ofEpochMilli(p.getKey().getOrderDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDate().getYear() == year)
+                            .collect(toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+                    HashMap<MenuItem, Integer> itemFreqHashMap = new HashMap<>();
+                    for(Order o : dayFilter.keySet()) {
+                        for(MenuItem mi : dayFilter.get(o)) {
+                            if(itemFreqHashMap.containsKey(mi)) {
+                                itemFreqHashMap.put(mi, itemFreqHashMap.get(mi) + 1);
+                            } else itemFreqHashMap.put(mi, 1);
+                        }
+                    }
+                    ReportGenerator.generateProductsWithinDay(itemFreqHashMap, tf_text1.getText(), Constants.USER_FULLNAME);
+                } catch (Exception e) {
+                    super.showDialog(event, "Invalid date", "Please insert a date with the specified format");
+                    return;
+                }
                 break;
             default :
                 return;
         }
         super.showDialog(event, "Report generated", "Report successfully generated and stored locally.");
+    }
+
+    public class OrderByCustomer {
+        String customerName;
+
+        public OrderByCustomer(String customerName) {
+            this.customerName = customerName;
+        }
+
+        public String getCustomerName() {
+            return customerName;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            OrderByCustomer that = (OrderByCustomer) o;
+            if (this.customerName == null) return false;
+            return customerName.equals(that.customerName);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(customerName);
+        }
     }
 
     @Override

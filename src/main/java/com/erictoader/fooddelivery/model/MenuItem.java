@@ -1,6 +1,7 @@
 package com.erictoader.fooddelivery.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public abstract class MenuItem implements Comparable<MenuItem>, Serializable {
     protected String title;
@@ -30,4 +31,18 @@ public abstract class MenuItem implements Comparable<MenuItem>, Serializable {
     public abstract Integer getPrice();
     public abstract void setPrice(Integer price);
     public abstract String getContains();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MenuItem menuItem = (MenuItem) o;
+        if(this.title == null) return false;
+        return title.equals(menuItem.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title);
+    }
 }

@@ -6,3 +6,5 @@
 *.htm linguist-detectable=false
 *.css linguist-detectable=false
 *.js linguist-detectable=false
+Documentatie.pdf linguist-documentation
+JavaDoc/* linguist-documentation

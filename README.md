@@ -13,12 +13,9 @@ Working features:
 - file browsing to add products
 - employee interface
 - clients can finalize and place orders
-- admins can generate reports based on time intervals in order to better see orders
+- admins can generate all kinds of reports in order to see what their most popular items are, who are their most valuable and loyal customers and more
 - employees can prepare and finish orders
 
-TODO:
-- admins can generate other types of reports
-- documentation
 
 ## Login/register interface
 <img width="793" alt="Screenshot 2022-05-02 at 20 50 59" src="https://user-images.githubusercontent.com/99261319/166300543-dd1ba2c1-af15-47b9-b345-25f84afa3c18.png">

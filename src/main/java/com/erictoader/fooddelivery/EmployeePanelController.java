@@ -22,7 +22,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class EmployeeController extends ControllerClass implements Observer, Initializable {
+public class EmployeePanelController extends ControllerClass implements Observer, Initializable {
 
     @FXML
     private Button btn_admin_logout;
@@ -105,10 +105,8 @@ public class EmployeeController extends ControllerClass implements Observer, Ini
         tc_emp.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getKey().getAssignedEmployee()));
         tc_contents.setCellValueFactory(p -> new SimpleStringProperty(p.getValue().getValue().toString()));
 
-        Constants.ds.addObserver(this);
-
-
         populateTable();
+        Constants.ds.addObserver(this);
     }
 
     private void populateTable() {

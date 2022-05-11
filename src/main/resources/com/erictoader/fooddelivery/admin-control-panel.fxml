@@ -13,7 +13,7 @@
    <children>
       <Pane layoutY="50.0" prefHeight="760.0" prefWidth="440.0" style="-fx-border-color: #000000;">
          <children>
-            <Label layoutX="10.0" layoutY="740.0" text="Food Delivery Management System v0 by Eric Toader" />
+            <Label layoutX="10.0" layoutY="740.0" text="Food Delivery Management System v1.0 by Eric Toader" />
             <Label layoutX="128.0" layoutY="36.0" text="Admin Control Panel">
                <font>
                   <Font size="22.0" />
